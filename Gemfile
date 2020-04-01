@@ -38,6 +38,7 @@ group :test do
   gem 'webdrivers'
 
   gem 'factory_bot_rails', '~> 5.1.1'
+  gem 'database_cleaner-active_record'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
