@@ -1,0 +1,30 @@
+---
+openapi: 3.0.1
+info:
+  title: Surveyor API
+  version: v1
+paths:
+  "/responses":
+    post:
+      summary: submit responses
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: payload
+        in: body
+        schema:
+          type: object
+          properties:
+            respondentIdentifier:
+              type: string
+              example: '00001'
+      responses:
+        '200':
+          description: successful
+    get:
+      summary: list responses
+      responses:
+        '200':
+          description: successful
