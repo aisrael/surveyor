@@ -1,0 +1,40 @@
+- identifier: "00001"
+  profile:
+    gender:     Female
+    department: Sales
+
+- identifier: "00002"
+  profile:
+    gender:     Male
+    department: Sales
+
+- identifier: "00003"
+  profile:
+    gender:     Male
+    department: Customer Success
+
+- identifier: "00004"
+  profile:
+    gender:     Female
+    department: Customer Success
+
+- identifier: "00005"
+  profile:
+    gender:     Male
+    department: Customer Success
+
+- identifier: "00006"
+  profile:
+    gender:     Male
+    department: Software Development
+
+- identifier: "00007"
+  profile:
+    gender:     Female
+    department: Software Development
+
+- identifier: "00008"
+  profile:
+    gender:     Female
+    department: Marketing
+

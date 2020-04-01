@@ -1,0 +1,30 @@
+- id:       1
+  type:     scored
+  prompt:   "I get excellent support for the work I do"
+  optional: false
+
+- id:       2
+  type:     open_ended
+  prompt:   "What is the biggest issue you face at work?"
+  optional: true
+
+- id:       3
+  type:     scored
+  prompt:   "I feel appreciated for my contributions made at work."
+  optional: false
+
+- id:       4
+  type:     scored
+  prompt:   "I am satisfied with the level of openness to change in my organisation"
+  optional: false
+
+- id:       5
+  type:     scored
+  prompt:   "My organisation embraces change in order to achieve better outcomes."
+  optional: false
+
+- id:       6
+  type:     open_ended
+  prompt:   "What is one thing you are concerned about for 2020?"
+  optional: false
+
