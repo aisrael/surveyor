@@ -20,6 +20,17 @@ paths:
             respondentIdentifier:
               type: string
               example: '00001'
+            responses:
+              type: array
+              items:
+                type: object
+                properties:
+                  questionId:
+                    type: integer
+                    example: 1
+                  body:
+                    type: string
+                    example: '4'
       responses:
         '200':
           description: successful

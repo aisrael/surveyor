@@ -8,7 +8,6 @@
 
 require 'yaml'
 
-
 FIXTURES_FILES_DIR = 'test/fixtures/files/'
 QUESTIONS_FILE = File.new(File.join(FIXTURES_FILES_DIR, 'questions.yml'))
 
