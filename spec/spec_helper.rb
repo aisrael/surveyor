@@ -57,8 +57,8 @@ RSpec.configure do |config|
     end
   end
 
-# The settings below are suggested to provide a good initial experience
-# with RSpec, but feel free to customize to your heart's content.
+  # The settings below are suggested to provide a good initial experience
+  # with RSpec, but feel free to customize to your heart's content.
 =begin
   # This allows you to limit a spec run to individual examples or groups
   # you care about by tagging them with `:focus` metadata. When nothing
@@ -106,5 +106,23 @@ RSpec.configure do |config|
   # the seed, which is printed after each run.
   #     --seed 1234
   config.order = :random
+end
 
+def seed_test_data
+  fixtures_files_dir = "test/fixtures/files/"
+  questions_file = File.new(File.join(fixtures_files_dir, "questions.yml"))
+
+  YAML.load(questions_file).each do |record|
+    Question.create id: record["id"],
+      question_type: record["type"],
+      prompt: record["prompt"],
+      optional: record["optional"]
+  end
+
+  respondents_file = File.new(File.join(fixtures_files_dir, "respondents.yml"))
+  YAML.load(respondents_file).each do |record|
+    Respondent.create identifier: record["identifier"],
+      gender: record["profile"]["gender"],
+      department: record["profile"]["department"]
+  end
 end

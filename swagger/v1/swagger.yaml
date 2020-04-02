@@ -4,6 +4,31 @@ info:
   title: Surveyor API
   version: v1
 paths:
+  "/averages":
+    get:
+      summary: averages
+      produces:
+      - application/json
+      responses:
+        '200':
+          description: successful
+          schema:
+            type: object
+            properties:
+              questionAverages:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    questionId:
+                      type: integer
+                      example: 1
+                    averageScore:
+                      type: number
+                      example: 4.0
+                  required:
+                  - questionId
+                  - averageScore
   "/responses":
     post:
       summary: submit responses
@@ -92,28 +117,3 @@ paths:
                   required:
                   - questionId
                   - body
-  "/averages":
-    get:
-      summary: list averages
-      produces:
-      - application/json
-      responses:
-        '200':
-          description: successful
-          schema:
-            type: object
-            properties:
-              questionAverages:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    questionId:
-                      type: integer
-                      example: 1
-                    averageScore:
-                      type: number
-                      example: 4.0
-                  required:
-                  - questionId
-                  - averageScore
