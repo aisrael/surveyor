@@ -124,14 +124,11 @@ RSpec.describe 'responses', type: :request do
 
         before do |example|
           @count = Response.count
-          puts "@count => #{@count}"
           submit_request(example.metadata)
         end
 
         it 'returns a valid 201 response' do |example|
           assert_response_matches_metadata(example.metadata)
-          puts "@count => #{@count}"
-          puts "Response.count => #{Response.count}"
           assert(Response.count == @count + 2) # Two new responses
         end
 
@@ -208,20 +205,32 @@ RSpec.describe 'responses', type: :request do
             }
           }
 
-        let(:responses) do
-          respondent = Respondent.first
+        before do
+          # Create test data
           question = Question.where(question_type: 'scored').first
           ScoredResponse.create!(
-            respondent_id: respondent.id,
+            respondent_id: Respondent.first.id,
             question_id: question.id,
             body: '4'
+          )
+          ScoredResponse.create!(
+            respondent_id: Respondent.second.id,
+            question_id: question.id,
+            body: '2'
           )
         end
 
         after do |example|
           example.metadata[:response][:examples] = { 'application/json' => JSON.parse(response.body, symbolize_names: true) }
         end
-        run_test!
+
+        run_test! do |response|
+
+          data = JSON.parse(response.body)
+          first = data['questionAverages'].first
+          expect(first['questionId']).to eq(1)
+          expect(first['averageScore']).to eq(3.0)
+        end
       end
     end
   end
