@@ -1,0 +1,2 @@
+class OpenEndedResponse < Response
+end

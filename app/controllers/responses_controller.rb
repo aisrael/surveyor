@@ -1,15 +1,34 @@
 class ResponsesController < ApiController
+
+    # GET /responses
     def index
-        render json: Response.all
+        responses = Response.all.map do |response|
+            {
+                questionId: response.question_id,
+                body: response.type == 'OpenEndedResponse' ? response.body : response.score
+            }
+        end
+        render json: {responses: responses}
     end
 
+
+    # POST /responses
+    # {
+    #   "respondentIdentifier"=>"00001",
+    #   "responses"=>[
+    #     {"questionId"=>1, "body"=>4},
+    #     {"questionId"=>2, "body"=>"Unclear expectations"}
+    #   ]
+    # }
     def create
-        $stderr.puts "params: #{params.inspect}"
-#        {"respondentIdentifier"=>"00001", "responses"=>[{"questionId"=>1, "body"=>4}, {"questionId"=>2, "body"=>"Unclear expectations"}
         respondent_identifier = params[:respondentIdentifier]
-        $stderr.puts "respondent_identifier: #{respondent_identifier}"
-        count = Response.where(respondent_id: respondent_identifier).count
-        $stderr.puts "count => #{count}"
+        respondent = Respondent.where(identifier: respondent_identifier).take
+        if respondent.nil? then
+            errors = [{status: 400, title: "No respondent with identifier \"#{respondent_identifier}\""}]
+            return render(status: :bad_request, json: {errors: errors})
+        end
+
+        count = respondent.responses.count
         if count > 0 then
             errors = [{status: 400, title: "Respondent already submitted response(s)"}]
             return render(status: :bad_request, json: {errors: errors})
@@ -30,8 +49,6 @@ class ResponsesController < ApiController
         end
 
         responses = params_responses.zip(questions).map do |response_param, question|
-            $stderr.puts response_param.inspect
-            $stderr.puts question.inspect
             response = if question.question_type == 'scored' then
                 ScoredResponse.new(
                     respondent_id: respondent_identifier,
@@ -45,12 +62,24 @@ class ResponsesController < ApiController
                     body: response_param[:body]
                 )
             end
-            $stderr.puts(response.inspect)
+            response.respondent = respondent
             response.save!
             response
         end
 
-        json_data = responses.map {|resp| resp.attributes.slice(*%w[id respondent_id question_id body])}
-        render json: {data: json_data}
+        data = responses.map do |response|
+            {
+                id: response.id,
+                respondentIdentifier: response.respondent.identifier,
+                questionId: response.question_id,
+                body: response.type == 'OpenEndedResponse' ? response.body : response.score
+            }
+        end
+
+        render json: {data: data}
+    end
+
+    # GET /response-averages
+    def averages
     end
 end

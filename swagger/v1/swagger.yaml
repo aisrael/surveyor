@@ -28,14 +28,67 @@ paths:
                   questionId:
                     type: integer
                     example: 1
-                  body:
+                  respondentId:
                     type: string
-                    example: '4'
+                    example: '00001'
+                  body:
+                    oneOf:
+                    - type: integer
+                      example: 4
+                    - type: string
+                      example: Unclear expectations
       responses:
         '200':
           description: successful
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                    respondentIdentifier:
+                      type: string
+                      example: '00001'
+                    questionId:
+                      type: integer
+                      example: 1
+                    body:
+                      oneOf:
+                      - type: integer
+                        example: 4
+                      - type: string
+                        example: Unclear expectations
+                  required:
+                  - id
+                  - respondentIdentifier
+                  - questionId
+                  - body
+            required:
+            - data
     get:
       summary: list responses
       responses:
         '200':
           description: successful
+          schema:
+            type: object
+            properties:
+              responses:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    questionId:
+                      type: integer
+                      example: 1
+                    body:
+                      type: string
+                      example: '4'
+                  required:
+                  - questionId
+                  - body

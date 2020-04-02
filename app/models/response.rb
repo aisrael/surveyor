@@ -1,12 +1,10 @@
 class Response < ApplicationRecord
-end
+    belongs_to :respondent
 
-class ScoredResponse < Response
-    def score
-        return nil if body.nil?
-        return body.to_i
+    def as_json(*)
+        h = super.except("id", "created_at", "updated_at").map do |k, v|
+            [k.to_s.camelcase(:lower), v]
+        end
+        Hash[h]
     end
-end
-
-class OpenEndedResponse < Response
 end
