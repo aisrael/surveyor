@@ -181,4 +181,48 @@ RSpec.describe 'responses', type: :request do
       end
     end
   end
+
+  path '/averages' do
+    get('list averages') do
+      produces 'application/json'
+
+      response(200, 'successful') do
+        schema type: :object,
+          properties: {
+            questionAverages: {
+              type: :array,
+              items: {
+                type: :object,
+                properties: {
+                  questionId: {
+                    type: :integer,
+                    example: 1
+                  },
+                  averageScore: {
+                    type: :number,
+                    example: 4.0
+                  }
+                },
+                required: ['questionId', 'averageScore']
+              }
+            }
+          }
+
+        let(:responses) do
+          respondent = Respondent.first
+          question = Question.where(question_type: 'scored').first
+          ScoredResponse.create!(
+            respondent_id: respondent.id,
+            question_id: question.id,
+            body: '4'
+          )
+        end
+
+        after do |example|
+          example.metadata[:response][:examples] = { 'application/json' => JSON.parse(response.body, symbolize_names: true) }
+        end
+        run_test!
+      end
+    end
+  end
 end
