@@ -59,4 +59,66 @@ RSpec.describe "analytics", type: :request do
       end
     end
   end
+
+  path "/scored-question-distributions" do
+    get("scored-question-distributions") do
+      produces "application/json"
+
+      response(200, "successful") do
+        schema type: :object,
+          properties: {
+            scored_question_distributions: {
+              type: :array,
+              items: {
+                type: :object,
+                properties: {
+                  questionId: {
+                    type: :integer,
+                    example: 1,
+                  },
+                  responseFrequencies: {
+                    type: :array,
+                    items: {
+                      type: :object,
+                      properties: {
+                        score: { type: :integer },
+                        frequency: { type: :integer },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          }
+
+        before do
+          # Create test data
+          question = Question.where(question_type: "scored").first
+          ScoredResponse.create!(
+            respondent_id: Respondent.first.id,
+            question_id: question.id,
+            body: "4",
+          )
+          ScoredResponse.create!(
+            respondent_id: Respondent.second.id,
+            question_id: question.id,
+            body: "2",
+          )
+        end
+
+        after do |example|
+          example.metadata[:response][:examples] = { "application/json" => JSON.parse(response.body, symbolize_names: true) }
+        end
+
+        run_test! do |response|
+          data = JSON.parse(response.body)
+          first = data["scored_question_distributions"].first
+          expect(first["questionId"]).to eq(1)
+          response_frequencies = first["responseFrequencies"]
+          expect(response_frequencies[1]["frequency"]).to eq(1)
+          expect(response_frequencies[3]["frequency"]).to eq(1)
+        end
+      end
+    end
+  end
 end
