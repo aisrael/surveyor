@@ -29,6 +29,34 @@ paths:
                   required:
                   - questionId
                   - averageScore
+  "/scored-question-distributions":
+    get:
+      summary: scored-question-distributions
+      produces:
+      - application/json
+      responses:
+        '200':
+          description: successful
+          schema:
+            type: object
+            properties:
+              scored_question_distributions:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    questionId:
+                      type: integer
+                      example: 1
+                    responseFrequencies:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          score:
+                            type: integer
+                          frequency:
+                            type: integer
   "/responses":
     post:
       summary: submit responses
