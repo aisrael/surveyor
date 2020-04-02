@@ -29,19 +29,28 @@ class ResponsesController < ApiController
             return render(status: :bad_request, json: {errors: errors})
         end
 
-        params_responses.zip(questions).map do |response_param, question|
+        responses = params_responses.zip(questions).map do |response_param, question|
             $stderr.puts response_param.inspect
             $stderr.puts question.inspect
-            response = Response.new(respondent_id: respondent_identifier, question_id: question.id, response_body: response_body)
-            response.response_body = if question.question_type == 'scored' then
-                ScoredResponse.new(score: response_param[:body].to_i)
+            response = if question.question_type == 'scored' then
+                ScoredResponse.new(
+                    respondent_id: respondent_identifier,
+                    question_id: question.id,
+                    body: response_param[:body]
+                )
             else
-                OpenEndedResponse.new(body: response_param[:body])
+                OpenEndedResponse.new(
+                    respondent_id: respondent_identifier,
+                    question_id: question.id,
+                    body: response_param[:body]
+                )
             end
             $stderr.puts(response.inspect)
             response.save!
+            response
         end
 
-        render json: []
+        json_data = responses.map {|resp| resp.attributes.slice(*%w[id respondent_id question_id body])}
+        render json: {data: json_data}
     end
 end
