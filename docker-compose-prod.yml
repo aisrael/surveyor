@@ -12,7 +12,7 @@ services:
     networks:
       - surveyor
   surveyor:
-    image: surveyor
+    image: aisrael/surveyor
     ports:
       - 3000:3000
     environment:

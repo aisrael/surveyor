@@ -342,10 +342,8 @@ Should return
 
 ### Building the Docker image
 
-If you use Docker, you won't need to install Rails or Node.
-
 ```
-$ docker build -t surveyor .
+$ docker build -t aisrael/surveyor .
 Sending build context to Docker daemon  88.14MB
 Step 1/14 : FROM ruby:2.6.4
  ---> 121862ceb25f
@@ -356,6 +354,14 @@ Step 1/14 : FROM ruby:2.6.4
 
 ### Running the Entire Stack using Docker Compose
 
+If you simply want to run the stack without even building anything, `aisrael/surveyor` is available for download from [Docker Hub]
+
 ```
 $ docker-compose -f docker-compose-prod.yml up -d
+```
+
+Don't forget to initialize the database if you haven't done so:
+
+```
+$ rails db:migrate db:seed
 ```
