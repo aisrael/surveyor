@@ -5,7 +5,7 @@ RSpec.describe "analytics", type: :request do
     seed_test_data
   end
 
-  path "/averages" do
+  path "/api/v1/averages" do
     get("averages") do
       produces "application/json"
 
@@ -60,7 +60,7 @@ RSpec.describe "analytics", type: :request do
     end
   end
 
-  path "/scored-question-distributions" do
+  path "/api/v1/scored-question-distributions" do
     get("scored-question-distributions") do
       produces "application/json"
 
@@ -122,7 +122,7 @@ RSpec.describe "analytics", type: :request do
     end
   end
 
-  path "/profile-segment-scores-by-gender" do
+  path "/api/v1/profile-segment-scores-by-gender" do
     get("profile-segment-scores-by-gender") do
       produces "application/json"
 

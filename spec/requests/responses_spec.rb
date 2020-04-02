@@ -5,7 +5,7 @@ RSpec.describe "responses", type: :request do
     seed_test_data
   end
 
-  path "/responses" do
+  path "/api/v1/responses" do
     post("submit responses") do
       consumes "application/json"
       produces "application/json"

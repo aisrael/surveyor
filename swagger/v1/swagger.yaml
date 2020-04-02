@@ -4,7 +4,7 @@ info:
   title: Surveyor API
   version: v1
 paths:
-  "/averages":
+  "/api/v1/averages":
     get:
       summary: averages
       produces:
@@ -29,7 +29,7 @@ paths:
                   required:
                   - questionId
                   - averageScore
-  "/scored-question-distributions":
+  "/api/v1/scored-question-distributions":
     get:
       summary: scored-question-distributions
       produces:
@@ -57,7 +57,7 @@ paths:
                             type: integer
                           frequency:
                             type: integer
-  "/profile-segment-scores-by-gender":
+  "/api/v1/profile-segment-scores-by-gender":
     get:
       summary: profile-segment-scores-by-gender
       produces:
@@ -87,7 +87,7 @@ paths:
                             type: integer
                           averageScore:
                             type: number
-  "/responses":
+  "/api/v1/responses":
     post:
       summary: submit responses
       consumes:
