@@ -6,4 +6,5 @@ Rails.application.routes.draw do
 
   get "/averages", to: "analytics#averages"
   get "/scored-question-distributions", to: "analytics#scored_question_distributions"
+  get "/profile-segment-scores-by-gender", to: "analytics#profile_segment_scores_by_gender"
 end

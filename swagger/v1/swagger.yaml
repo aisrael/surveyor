@@ -57,6 +57,36 @@ paths:
                             type: integer
                           frequency:
                             type: integer
+  "/profile-segment-scores-by-gender":
+    get:
+      summary: profile-segment-scores-by-gender
+      produces:
+      - application/json
+      responses:
+        '200':
+          description: successful
+          schema:
+            type: object
+            properties:
+              profileSegmentScores:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    segment:
+                      type: object
+                      properties:
+                        gender:
+                          type: string
+                    questionAverages:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          questionId:
+                            type: integer
+                          averageScore:
+                            type: number
   "/responses":
     post:
       summary: submit responses

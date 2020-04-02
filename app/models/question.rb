@@ -1,6 +1,8 @@
 class Question < ApplicationRecord
   has_many :responses
 
+  scope :scored_questions, -> { where(question_type: "scored") }
+
   # Returns the scored question distributions:
   #
   # ```
@@ -14,7 +16,7 @@ class Question < ApplicationRecord
   # ]
   # ```
   def self.scored_question_distributions
-    Question.where(question_type: "scored").all.map do |question|
+    Question.scored_questions.all.map do |question|
       responses_grouped_by_score = question.responses.group_by(&:score)
       response_frequencies = (1..5).map do |score|
         frequency = if responses_grouped_by_score.has_key?(score)

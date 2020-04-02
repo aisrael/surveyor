@@ -121,4 +121,71 @@ RSpec.describe "analytics", type: :request do
       end
     end
   end
+
+  path "/profile-segment-scores-by-gender" do
+    get("profile-segment-scores-by-gender") do
+      produces "application/json"
+
+      response(200, "successful") do
+        schema type: :object,
+          properties: {
+            profileSegmentScores: {
+              type: :array,
+              items: {
+                type: :object,
+                properties: {
+                  segment: {
+                    type: :object,
+                    properties: {
+                      gender: { type: :string },
+                    },
+                  },
+                  questionAverages: {
+                    type: :array,
+                    items: {
+                      type: :object,
+                      properties: {
+                        questionId: { type: :integer },
+                        averageScore: { type: :number },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          }
+
+        before do
+          # Create test data
+          question = Question.where(question_type: "scored").first
+          ScoredResponse.create!(
+            respondent_id: Respondent.first.id,
+            question_id: question.id,
+            body: "4",
+          )
+          ScoredResponse.create!(
+            respondent_id: Respondent.second.id,
+            question_id: question.id,
+            body: "2",
+          )
+        end
+
+        after do |example|
+          example.metadata[:response][:examples] = { "application/json" => JSON.parse(response.body, symbolize_names: true) }
+        end
+
+        run_test! do |response|
+          data = JSON.parse(response.body)
+          first = data["profileSegmentScores"].first
+          expect(first["segment"]["gender"]).to eq("Female")
+          expect(first["questionAverages"].first["questionId"]).to eq(1)
+          expect(first["questionAverages"].first["averageScore"]).to eq(4.0)
+          second = data["profileSegmentScores"].second
+          expect(second["segment"]["gender"]).to eq("Male")
+          expect(second["questionAverages"].first["questionId"]).to eq(1)
+          expect(second["questionAverages"].first["averageScore"]).to eq(2.0)
+        end
+      end
+    end
+  end
 end
